@@ -2,7 +2,6 @@ package data.database;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import data.model.Task;
 
 
@@ -40,6 +39,16 @@ public class FakeDatabaseConnection implements DatabaseConnection {
         } else {
             System.out.println("Уже отключен от базы данных");
         }
+    }
+
+    @Override
+    public void insert(Task task) {
+        database.put(task.getId(), task);
+    }
+
+    @Override
+    public Map<Integer, Task> getDatabase() {
+        return database;
     }
 
 }

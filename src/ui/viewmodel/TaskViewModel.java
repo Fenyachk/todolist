@@ -1,39 +1,24 @@
 package ui.viewmodel;
 
-import com.toedter.calendar.JCalendar;
+import data.model.Task;
+import data.database.DatabaseHelper;
 
-import javax.swing.*;
-import java.awt.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
-import data.model.Task;
-import data.database.FakeDatabaseConnection;
-
 public class TaskViewModel {
-
-    private final FakeDatabaseConnection dbConnection;
+    private final DatabaseHelper dbConnection;
 
     public TaskViewModel() {
-        this.dbConnection = new FakeDatabaseConnection();
+        this.dbConnection = new DatabaseHelper();
     }
 
-    private void displayTasksOnCalendar(JCalendar calendar) {
-        Map<Integer, Task> tasks = dbConnection.getAllTasks();
-        for (Task task : tasks.values()) {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-            try {
-                Date taskDate = formatter.parse(task.getDate());
-                System.out.println("Задача: " + task.getName() + " на " + taskDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+    public void addTask(Task task) {
+        dbConnection.insertTask(task);
     }
 
-    public Map<Integer, Task> getAllTasks() {
-        //return dbConnection;
+    public Map<Integer, Task> getAllTask() {
+        return dbConnection.getAllTask();
     }
+
 }
