@@ -2,15 +2,15 @@ package data.database;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import data.model.Task;
 
-
-public class FakeDatabaseConnection implements DatabaseConnection {
+public class FakeDatabase implements DatabaseConnection {
 
     private final Map<Integer, Task> database;
     private boolean isConnected;
 
-    public FakeDatabaseConnection() {
+    public FakeDatabase() {
         database = new HashMap<>();
         isConnected = false;
 
@@ -42,13 +42,23 @@ public class FakeDatabaseConnection implements DatabaseConnection {
     }
 
     @Override
+    public Map<Integer, Task> getTask() {
+        return database;
+    }
+
+    @Override
     public void insert(Task task) {
         database.put(task.getId(), task);
     }
 
     @Override
-    public Map<Integer, Task> getDatabase() {
-        return database;
+    public void update(Task task) {
+//        database.
+    }
+
+    @Override
+    public void delete(Task task) {
+        database.remove(task.getId());
     }
 
 }

@@ -11,5 +11,9 @@ public interface DatabaseConnection {
 
     void insert(Task task);
 
-    Map<Integer, Task> getDatabase();
+    void update(Task task);
+
+    void delete(Task task);
+
+    Map<Integer, Task> getTask();
 }

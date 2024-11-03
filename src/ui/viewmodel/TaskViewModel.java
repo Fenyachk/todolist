@@ -1,16 +1,15 @@
 package ui.viewmodel;
 
 import data.model.Task;
-import data.database.DatabaseHelper;
+import data.repository.RepoImpl;
 
-import java.util.List;
 import java.util.Map;
 
 public class TaskViewModel {
-    private final DatabaseHelper dbConnection;
+    private final RepoImpl dbConnection;
 
     public TaskViewModel() {
-        this.dbConnection = new DatabaseHelper();
+        this.dbConnection = new RepoImpl();
     }
 
     public void addTask(Task task) {

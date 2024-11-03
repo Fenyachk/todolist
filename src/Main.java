@@ -27,5 +27,8 @@ public class Main {
             Task task = entry.getValue();
             System.out.println(task.getName());
         }
+        CalendarView calendarView = new CalendarView();
+        calendarView.showCalendar();
+
     }
 }

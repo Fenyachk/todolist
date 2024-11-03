@@ -8,10 +8,9 @@ import data.model.Task;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
-public class RealDatabaseConnection implements DatabaseConnection {
+public class RealDatabase implements DatabaseConnection {
     private static final String DATABASE_URL = "../.../../config/todolist-ab5ae-firebase-adminsdk-mtvk2-4ec34dbe8f.json";
     private Map<Integer, Task> database;
 
@@ -34,12 +33,20 @@ public class RealDatabaseConnection implements DatabaseConnection {
     }
 
     @Override
+    public Map<Integer, Task> getTask() {
+        return database;
+    }
+
+    @Override
     public void insert(Task task) {
     }
 
     @Override
-    public Map<Integer, Task> getDatabase() {
-        return database;
+    public void update(Task task) {
+    }
+
+    @Override
+    public void delete(Task task) {
     }
 
 }
