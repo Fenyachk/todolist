@@ -24,12 +24,18 @@ public class RepoImpl implements IRepo {
     }
 
     @Override
-    public void deleteTask(Task task) {
-        databaseConnector.delete(task);
+    public void deleteTask(int taskId) {
+        databaseConnector.delete(taskId);
     }
 
     @Override
-    public void getTask() {
-
+    public Map<Integer, Task> getAllTask() {
+        return databaseConnector.getAllTask();
     }
+
+    @Override
+    public Map<Integer, Task> getTaskById(int taskId) {
+        return databaseConnector.getTaskById(taskId);
+    }
+
 }

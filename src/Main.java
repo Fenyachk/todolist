@@ -5,7 +5,6 @@ import javax.swing.UIManager;
 
 import ui.viewmodel.TaskViewModel;
 
-import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -17,15 +16,15 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         TaskViewModel viewModel = new TaskViewModel();
-        Task newTask = new Task(6, "Call the bank 2", "27.11.2024 16:45", 2);
+        Task newTask = new Task(6, "Call the bank 2", "12.11.2024 16:45", 5);
         viewModel.addTask(newTask);
         viewModel.getAllTask();
 
         Map<Integer, Task> tasks = viewModel.getAllTask();
         for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
             Task task = entry.getValue();
-            System.out.println(task.getName());
         }
         CalendarView calendarView = new CalendarView();
         calendarView.showCalendar();

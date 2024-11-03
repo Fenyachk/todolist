@@ -33,11 +33,6 @@ public class RealDatabase implements DatabaseConnection {
     }
 
     @Override
-    public Map<Integer, Task> getTask() {
-        return database;
-    }
-
-    @Override
     public void insert(Task task) {
     }
 
@@ -46,7 +41,16 @@ public class RealDatabase implements DatabaseConnection {
     }
 
     @Override
-    public void delete(Task task) {
+    public void delete(int taskId) {
     }
 
+    @Override
+    public Map<Integer, Task> getAllTask() {
+        return database;
+    }
+
+    @Override
+    public Map<Integer, Task> getTaskById(int taskId) {
+        return database;
+    }
 }

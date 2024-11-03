@@ -13,7 +13,9 @@ public interface DatabaseConnection {
 
     void update(Task task);
 
-    void delete(Task task);
+    void delete(int taskId);
 
-    Map<Integer, Task> getTask();
+    Map<Integer, Task> getAllTask();
+
+    Map<Integer, Task> getTaskById(int taskId);
 }

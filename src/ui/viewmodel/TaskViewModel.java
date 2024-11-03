@@ -16,8 +16,19 @@ public class TaskViewModel {
         dbConnection.insertTask(task);
     }
 
+    public void updateTask(Task task) {
+        dbConnection.updateTask(task);
+    }
+
+    public void deleteTask(int taskId) {
+        dbConnection.deleteTask(taskId);
+    }
+
+    public Map<Integer, Task> getTask(int taskId) {
+        return dbConnection.getTaskById(taskId);
+    }
+
     public Map<Integer, Task> getAllTask() {
         return dbConnection.getAllTask();
     }
-
 }
