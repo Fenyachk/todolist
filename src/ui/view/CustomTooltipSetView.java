@@ -6,28 +6,31 @@ import ui.viewmodel.CustomTooltip;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.util.List;
 
 public class CustomTooltipSetView {
 
     private final JCalendar calendar;
-    private JFrame frame;
-    private JPanel panel;
     private final JPopupMenu tooltipPopup;
     private final JLabel tooltipLabel;
 
-    public CustomTooltipSetView(JCalendar calendar, JPopupMenu tooltipPopup, JLabel tooltipLabel) {
+    public CustomTooltipSetView(JCalendar calendar) {
         this.calendar = calendar;
-        this.tooltipPopup = tooltipPopup;
-        this.tooltipLabel = tooltipLabel;
+        this.tooltipPopup = new JPopupMenu();
+        this.tooltipLabel = new JLabel();
+        this.tooltipPopup.add(tooltipLabel);
     }
 
     public void setTooltips() {
         this.setDayToolTips();
         this.calendar.getDayChooser().addPropertyChangeListener("day", evt -> {
+            this.setDayToolTips();
+        });
+        this.calendar.getMonthChooser().addPropertyChangeListener("month", evt -> {
+            this.setDayToolTips();
+        });
+        this.calendar.getYearChooser().addPropertyChangeListener("year", evt -> {
             this.setDayToolTips();
         });
     }
@@ -40,7 +43,6 @@ public class CustomTooltipSetView {
         for (Component component : dayChooser.getDayPanel().getComponents()) {
             if (component instanceof JButton dayButton) {
                 setDayButtonToolTip(dayButton, currentYear, currentMonth);
-                addMouseListenerToDayButton(dayButton, this.tooltipPopup, this.tooltipLabel);
             }
         }
     }
@@ -66,38 +68,14 @@ public class CustomTooltipSetView {
         }
     }
 
-    private static void addMouseListenerToDayButton(JButton dayButton, JPopupMenu tooltipPopup, JLabel tooltipLabel) {
-        dayButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                String tooltipText = dayButton.getToolTipText();
-                if (tooltipText != null) {
-                    tooltipLabel.setText(tooltipText);
-                    tooltipPopup.show(dayButton, 0, dayButton.getHeight());
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                tooltipPopup.setVisible(false);
-            }
-        });
-    }
-
     private static Color getBackgroundCellDay(int priority) {
-        switch (priority) {
-            case 1:
-                return Color.GREEN;
-            case 2:
-                return Color.YELLOW;
-            case 3:
-                return Color.ORANGE;
-            case 4:
-                return Color.PINK;
-            case 5:
-                return Color.RED;
-            default:
-                return Color.WHITE;
-        }
+        return switch (priority) {
+            case 1 -> Color.GREEN;
+            case 2 -> Color.YELLOW;
+            case 3 -> Color.ORANGE;
+            case 4 -> Color.PINK;
+            case 5 -> Color.RED;
+            default -> Color.WHITE;
+        };
     }
 }

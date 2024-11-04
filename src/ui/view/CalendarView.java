@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.toedter.calendar.JCalendar;
-import ui.viewmodel.CustomTooltip;
+import ui.viewmodel.CalendarListener;
 
 public class CalendarView {
 
@@ -15,8 +15,10 @@ public class CalendarView {
     public static void showCalendar() {
         JCalendar calendar = new JCalendar();
         JFrame frame = new JFrame("To-do List Calendar");
+        CalendarListener calendarListener = new CalendarListener(calendar, frame);
         drawCalendarWindow(calendar, frame);
         setTooltips(calendar);
+        calendarListener.addDoubleClickListener();
     }
 
     private static void drawCalendarWindow(JCalendar calendar, JFrame frame) {
@@ -28,12 +30,7 @@ public class CalendarView {
     }
 
     private static void setTooltips(JCalendar calendar) {
-        JPopupMenu tooltipPopup = new JPopupMenu();
-        JLabel tooltipLabel = new JLabel();
-        CustomTooltip customTooltipSetView = new CustomTooltip();
-        CustomTooltip customTooltip = new CustomTooltip();
-        CustomTooltipSetView customTooltipSetView1 = new CustomTooltipSetView(calendar, tooltipPopup, tooltipLabel);
-        tooltipPopup.add(tooltipLabel);
+        CustomTooltipSetView customTooltipSetView1 = new CustomTooltipSetView(calendar);
         customTooltipSetView1.setTooltips();
     }
 }

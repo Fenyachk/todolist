@@ -15,8 +15,8 @@ public class CustomTooltip {
     private int year;
     private int month;
     private int day;
-    private int hour;
-    private int minute;
+    private String hour;
+    private String minute;
     private String title;
     private static final Map<LocalDate, CustomTooltip> tooltips = new HashMap<>();
     private int priority;
@@ -32,8 +32,8 @@ public class CustomTooltip {
         this.year = dateTime.getYear();
         this.month = dateTime.getMonthValue();
         this.day = dateTime.getDayOfMonth();
-        this.hour = dateTime.getHour();
-        this.minute = dateTime.getMinute();
+        this.hour = String.format("%02d", dateTime.getHour());
+        this.minute = String.format("%02d", dateTime.getMinute());
         this.priority = task.getPriority();
         this.title = task.getName() + " в " + this.hour + ":" + this.minute;
 
@@ -43,11 +43,11 @@ public class CustomTooltip {
         return day;
     }
 
-    public int getHour() {
+    public String getHour() {
         return hour;
     }
 
-    public int getMinute() {
+    public String getMinute() {
         return minute;
     }
 
