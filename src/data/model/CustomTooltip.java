@@ -1,6 +1,6 @@
-package ui.viewmodel;
+package data.model;
 
-import data.model.Task;
+import ui.viewmodel.TaskViewModel;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,20 +20,22 @@ public class CustomTooltip {
     private String title;
     private static final Map<LocalDate, CustomTooltip> tooltips = new HashMap<>();
     private int priority;
+    private static final String TIME_FORMAT = "dd.MM.yyyy HH:mm";
+    private static final String DATE_FORMAT = "%02d";
 
     public CustomTooltip() {
     }
 
     public CustomTooltip(Task task) {
         String date = task.getDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
 
         LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
         this.year = dateTime.getYear();
         this.month = dateTime.getMonthValue();
         this.day = dateTime.getDayOfMonth();
-        this.hour = String.format("%02d", dateTime.getHour());
-        this.minute = String.format("%02d", dateTime.getMinute());
+        this.hour = String.format(DATE_FORMAT, dateTime.getHour());
+        this.minute = String.format(DATE_FORMAT, dateTime.getMinute());
         this.priority = task.getPriority();
         this.title = task.getName() + " в " + this.hour + ":" + this.minute;
 
@@ -70,7 +72,7 @@ public class CustomTooltip {
     public Map<LocalDate, CustomTooltip> getAllTooltips() {
         TaskViewModel taskModel = new TaskViewModel();
         Map<Integer, Task> tasks = taskModel.getAllTask();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
             Task task = entry.getValue();
             String name = task.getName();

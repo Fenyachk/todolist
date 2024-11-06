@@ -2,35 +2,38 @@ package ui.view;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDayChooser;
-import ui.viewmodel.CustomTooltip;
+import data.model.CustomTooltip;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class CustomTooltipSetView {
+public class CustomTooltipView {
 
     private final JCalendar calendar;
-    private final JPopupMenu tooltipPopup;
-    private final JLabel tooltipLabel;
+    private static final String DAY = "day";
+    private static final String MONTH = "month";
+    private static final String YEAR = "year";
 
-    public CustomTooltipSetView(JCalendar calendar) {
+    private static final CustomTooltip customTooltip = new CustomTooltip();
+
+    public CustomTooltipView(JCalendar calendar) {
         this.calendar = calendar;
-        this.tooltipPopup = new JPopupMenu();
-        this.tooltipLabel = new JLabel();
-        this.tooltipPopup.add(tooltipLabel);
+        JPopupMenu tooltipPopup = new JPopupMenu();
+        JLabel tooltipLabel = new JLabel();
+        tooltipPopup.add(tooltipLabel);
     }
 
     public void setTooltips() {
         this.setDayToolTips();
-        this.calendar.getDayChooser().addPropertyChangeListener("day", evt -> {
+        this.calendar.getDayChooser().addPropertyChangeListener(DAY, evt -> {
             this.setDayToolTips();
         });
-        this.calendar.getMonthChooser().addPropertyChangeListener("month", evt -> {
+        this.calendar.getMonthChooser().addPropertyChangeListener(MONTH, evt -> {
             this.setDayToolTips();
         });
-        this.calendar.getYearChooser().addPropertyChangeListener("year", evt -> {
+        this.calendar.getYearChooser().addPropertyChangeListener(YEAR, evt -> {
             this.setDayToolTips();
         });
     }
@@ -49,7 +52,6 @@ public class CustomTooltipSetView {
 
     private static void setDayButtonToolTip(JButton dayButton, int year, int month) {
         String dayText = dayButton.getText();
-        CustomTooltip customTooltip = new CustomTooltip();
         if (dayText.matches("\\d+")) {
             int day = Integer.parseInt(dayText);
             LocalDate date = LocalDate.of(year, month + 1, day);
