@@ -29,7 +29,6 @@ public class CustomTooltip {
     public CustomTooltip(Task task) {
         String date = task.getDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-
         LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
         this.year = dateTime.getYear();
         this.month = dateTime.getMonthValue();
@@ -39,6 +38,12 @@ public class CustomTooltip {
         this.priority = task.getPriority();
         this.title = task.getName() + " в " + this.hour + ":" + this.minute;
 
+    }
+
+    public CustomTooltip(int year, int month, int day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
     }
 
     public int getDay() {
@@ -86,7 +91,12 @@ public class CustomTooltip {
         return tooltips;
     }
 
-    public List<CustomTooltip> getTasksByDate(LocalDate targetDate) {
+    public List<CustomTooltip> getTaskByDate() {
+        LocalDate date = LocalDate.of(this.year, this.month + 1, this.day);
+        return parseTasksByDate(date);
+    }
+
+    private List<CustomTooltip> parseTasksByDate(LocalDate targetDate) {
         Map<LocalDate, CustomTooltip> allTooltips = getAllTooltips();
         List<CustomTooltip> tasksForDate = new ArrayList<>();
 

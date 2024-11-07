@@ -1,19 +1,15 @@
 package data.listener;
 
 import com.toedter.calendar.JCalendar;
+import ui.view.DayContextMenuView;
 import ui.view.TaskFormInputView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 
 public class CalendarListener {
-
-    private static final String ADD_ITEM_MENU = "Добавить";
-    private static final String EDIT_ITEM_MENU = "Редактировать";
-    private static final String REMOVE_ITEM_MENU = "Удалить";
 
     private final JCalendar calendar;
     private final JFrame frame;
@@ -35,7 +31,8 @@ public class CalendarListener {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if (SwingUtilities.isRightMouseButton(e)) {
-                            showContextMenu(e, dayButton);
+                            DayContextMenuView dayContextMenu = new DayContextMenuView(e);
+                            dayContextMenu.getContextMenuWithTask();
                         }
                     }
                 });
@@ -58,20 +55,6 @@ public class CalendarListener {
         }
     }
 
-    private void showContextMenu(MouseEvent e, JButton dayButton) {
-        JPopupMenu contextMenu = new JPopupMenu();
-
-        JMenuItem addItem = new JMenuItem(ADD_ITEM_MENU);
-        contextMenu.add(addItem);
-
-        JMenuItem editItem = new JMenuItem(EDIT_ITEM_MENU);
-        contextMenu.add(editItem);
-
-        JMenuItem removeItem = new JMenuItem(REMOVE_ITEM_MENU);
-        contextMenu.add(removeItem);
-
-        contextMenu.show(e.getComponent(), e.getX(), e.getY());
-    }
 
     private void setVisibleListener() {
         TaskFormInputView taskFormInputView = new TaskFormInputView(CalendarListener.this.frame);

@@ -14,17 +14,17 @@ public class CalendarView {
     private static final String NAME = "To-do List Calendar";
     private static final int WIDTH_WINDOW = 400;
     private static final int HEIGHT_WINDOW = 400;
+    private static final JCalendar calendar = new JCalendar();
 
     public static void showCalendar() {
-        JCalendar calendar = new JCalendar();
         JFrame frame = new JFrame(NAME);
         CalendarListener calendarListener = new CalendarListener(calendar, frame);
-        drawCalendarWindow(calendar, frame);
-        setTooltips(calendar);
+        drawCalendarWindow(frame);
+        setTooltips();
         calendarListener.addListener();
     }
 
-    private static void drawCalendarWindow(JCalendar calendar, JFrame frame) {
+    private static void drawCalendarWindow(JFrame frame) {
         frame.add(calendar);
         frame.setSize(WIDTH_WINDOW, HEIGHT_WINDOW);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +32,7 @@ public class CalendarView {
 
     }
 
-    private static void setTooltips(JCalendar calendar) {
+    private static void setTooltips() {
         CustomTooltipView customTooltipSetView1 = new CustomTooltipView(calendar);
         customTooltipSetView1.setTooltips();
     }

@@ -2,11 +2,13 @@ package ui.view;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDayChooser;
+import com.toedter.calendar.JMonthChooser;
 import data.model.CustomTooltip;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 public class CustomTooltipView {
@@ -16,7 +18,6 @@ public class CustomTooltipView {
     private static final String MONTH = "month";
     private static final String YEAR = "year";
 
-    private static final CustomTooltip customTooltip = new CustomTooltip();
 
     public CustomTooltipView(JCalendar calendar) {
         this.calendar = calendar;
@@ -40,32 +41,37 @@ public class CustomTooltipView {
 
     private void setDayToolTips() {
         JDayChooser dayChooser = this.calendar.getDayChooser();
+        JMonthChooser monthChooser = this.calendar.getMonthChooser();
         int currentMonth = this.calendar.getMonthChooser().getMonth();
         int currentYear = this.calendar.getYearChooser().getYear();
+        YearMonth yearMonth = YearMonth.of(currentYear, currentMonth + 1);
+        int daysInMonth = yearMonth.lengthOfMonth();
 
         for (Component component : dayChooser.getDayPanel().getComponents()) {
             if (component instanceof JButton dayButton) {
-                setDayButtonToolTip(dayButton, currentYear, currentMonth);
+                String text = dayButton.getText();
+                if (isNumeric(text)) {
+                    int day = Integer.parseInt(dayButton.getText());
+                    if (day >= 1 && day <= daysInMonth) {
+                        CustomTooltip customTooltip = new CustomTooltip(currentYear, currentMonth, day);
+                        setDayButtonToolTip(dayButton, customTooltip);
+                    } else {
+                        dayButton.setToolTipText(null);
+                    }
+                }
             }
         }
     }
 
-    private static void setDayButtonToolTip(JButton dayButton, int year, int month) {
-        String dayText = dayButton.getText();
-        if (dayText.matches("\\d+")) {
-            int day = Integer.parseInt(dayText);
-            LocalDate date = LocalDate.of(year, month + 1, day);
-            List<CustomTooltip> tooltip = customTooltip.getTasksByDate(date);
-            if (tooltip != null) {
-                for (CustomTooltip customTooltipForOutputs : tooltip) {
-                    String title = customTooltipForOutputs.getTitle();
-                    int priority = customTooltipForOutputs.getPriority();
-                    Color color = getBackgroundCellDay(priority);
-                    dayButton.setToolTipText(title);
-                    dayButton.setBackground(color);
-                }
-            } else {
-                dayButton.setToolTipText(null);
+    private static void setDayButtonToolTip(JButton dayButton, CustomTooltip customTooltip) {
+        List<CustomTooltip> tooltip = customTooltip.getTaskByDate();
+        if (tooltip != null) {
+            for (CustomTooltip customTooltipForOutputs : tooltip) {
+                String title = customTooltipForOutputs.getTitle();
+                int priority = customTooltipForOutputs.getPriority();
+                Color color = getBackgroundCellDay(priority);
+                dayButton.setToolTipText(title);
+                dayButton.setBackground(color);
             }
         }
     }
@@ -79,5 +85,14 @@ public class CustomTooltipView {
             case 5 -> Color.RED;
             default -> Color.WHITE;
         };
+    }
+
+    private boolean isNumeric(String text) {
+        try {
+            Integer.parseInt(text);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
