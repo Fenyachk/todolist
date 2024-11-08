@@ -3,9 +3,10 @@ package ui.viewmodel;
 import data.model.Task;
 import data.repository.RepoImpl;
 
+import java.time.LocalDate;
 import java.util.Map;
 
-public class TaskViewModel {
+public class TaskViewModel implements TaskViewModelInterface {
     private final RepoImpl dbConnection;
 
     public TaskViewModel() {
@@ -31,4 +32,9 @@ public class TaskViewModel {
     public Map<Integer, Task> getAllTask() {
         return dbConnection.getAllTask();
     }
+
+    public Map<Integer, Task> getTaskByDate(LocalDate date) {
+        return dbConnection.getTaskByDay(date);
+    }
+
 }

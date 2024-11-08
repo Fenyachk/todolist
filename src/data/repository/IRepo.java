@@ -2,6 +2,7 @@ package data.repository;
 
 import data.model.Task;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public interface IRepo {
@@ -15,5 +16,8 @@ public interface IRepo {
     Map<Integer, Task> getAllTask();
 
     Map<Integer, Task> getTaskById(int taskId);
+
+    Map<Integer, Task> getTaskByDay(LocalDate date);
+
 
 }

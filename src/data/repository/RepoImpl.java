@@ -3,6 +3,7 @@ package data.repository;
 import data.database.FakeDatabase;
 import data.model.Task;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public class RepoImpl implements IRepo {
@@ -36,6 +37,11 @@ public class RepoImpl implements IRepo {
     @Override
     public Map<Integer, Task> getTaskById(int taskId) {
         return databaseConnector.getTaskById(taskId);
+    }
+
+    @Override
+    public Map<Integer, Task> getTaskByDay(LocalDate date) {
+        return databaseConnector.getTaskByDay(date);
     }
 
 }

@@ -27,14 +27,12 @@ public class CustomTooltip {
     }
 
     public CustomTooltip(Task task) {
-        String date = task.getDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-        LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
-        this.year = dateTime.getYear();
-        this.month = dateTime.getMonthValue();
-        this.day = dateTime.getDayOfMonth();
-        this.hour = String.format(DATE_FORMAT, dateTime.getHour());
-        this.minute = String.format(DATE_FORMAT, dateTime.getMinute());
+        LocalDateTime date = task.getDate();
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
+        this.day = date.getDayOfMonth();
+        this.hour = String.format(DATE_FORMAT, date.getHour());
+        this.minute = String.format(DATE_FORMAT, date.getMinute());
         this.priority = task.getPriority();
         this.title = task.getName() + " в " + this.hour + ":" + this.minute;
 
@@ -82,8 +80,8 @@ public class CustomTooltip {
             Task task = entry.getValue();
             String name = task.getName();
             if (name != null) {
-                LocalDateTime dateTime = LocalDateTime.parse(task.getDate(), formatter);
-                LocalDate date = LocalDate.parse(task.getDate(), formatter);
+                LocalDateTime dateTime = task.getDate();
+                LocalDate date = dateTime.toLocalDate();
                 CustomTooltip customTooltip = new CustomTooltip(task);
                 tooltips.put(date, customTooltip);
             }
@@ -91,12 +89,14 @@ public class CustomTooltip {
         return tooltips;
     }
 
-    public List<CustomTooltip> getTaskByDate() {
+    public Map<Integer, Task> getTaskByDate() {
         LocalDate date = LocalDate.of(this.year, this.month + 1, this.day);
-        return parseTasksByDate(date);
+        TaskViewModel taskModel = new TaskViewModel();
+        return taskModel.getTaskByDate(date);
     }
 
     private List<CustomTooltip> parseTasksByDate(LocalDate targetDate) {
+
         Map<LocalDate, CustomTooltip> allTooltips = getAllTooltips();
         List<CustomTooltip> tasksForDate = new ArrayList<>();
 

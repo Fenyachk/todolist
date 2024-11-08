@@ -1,7 +1,8 @@
 package data.database;
 
-import java.util.Map; // Импортируем класс Map
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
 import data.model.Task;
 
 public interface DatabaseConnection {
@@ -18,4 +19,6 @@ public interface DatabaseConnection {
     Map<Integer, Task> getAllTask();
 
     Map<Integer, Task> getTaskById(int taskId);
+
+    Map<Integer, Task> getTaskByDay(LocalDate date);
 }

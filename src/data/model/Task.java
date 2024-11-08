@@ -1,16 +1,28 @@
 package data.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Task {
+    private final String hour;
+    private final String minute;
     private int id;
     private String name;
     private String date;
     private int priority;
+    private static final String DATE_FORMAT = "%02d";
+    private static final String TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
     public Task(int id, String name, String date, int priority) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.priority = priority;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+        LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
+        this.hour = String.format(DATE_FORMAT, dateTime.getHour());
+        this.minute = String.format(DATE_FORMAT, dateTime.getMinute());
     }
 
     public int getId() {
@@ -21,8 +33,9 @@ public class Task {
         return name;
     }
 
-    public String getDate() {
-        return date;
+    public LocalDateTime getDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return LocalDateTime.parse(date, formatter);
     }
 
     public int getPriority() {
@@ -43,6 +56,10 @@ public class Task {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public String getTitle() {
+        return this.name + " в " + this.hour + ":" + this.minute;
     }
 
 }

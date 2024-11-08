@@ -8,6 +8,8 @@ import data.model.Task;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class RealDatabase implements DatabaseConnection {
@@ -53,4 +55,10 @@ public class RealDatabase implements DatabaseConnection {
     public Map<Integer, Task> getTaskById(int taskId) {
         return database;
     }
+
+    @Override
+    public Map<Integer, Task> getTaskByDay(LocalDate date) {
+        return database;
+    }
+
 }

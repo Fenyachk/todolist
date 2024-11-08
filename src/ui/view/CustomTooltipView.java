@@ -2,14 +2,13 @@ package ui.view;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDayChooser;
-import com.toedter.calendar.JMonthChooser;
 import data.model.CustomTooltip;
+import data.model.Task;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
+import java.util.Map;
 
 public class CustomTooltipView {
 
@@ -41,7 +40,6 @@ public class CustomTooltipView {
 
     private void setDayToolTips() {
         JDayChooser dayChooser = this.calendar.getDayChooser();
-        JMonthChooser monthChooser = this.calendar.getMonthChooser();
         int currentMonth = this.calendar.getMonthChooser().getMonth();
         int currentYear = this.calendar.getYearChooser().getYear();
         YearMonth yearMonth = YearMonth.of(currentYear, currentMonth + 1);
@@ -64,9 +62,10 @@ public class CustomTooltipView {
     }
 
     private static void setDayButtonToolTip(JButton dayButton, CustomTooltip customTooltip) {
-        List<CustomTooltip> tooltip = customTooltip.getTaskByDate();
+        Map<Integer, Task> tooltip = customTooltip.getTaskByDate();
         if (tooltip != null) {
-            for (CustomTooltip customTooltipForOutputs : tooltip) {
+            for (Map.Entry<Integer, Task> entry : tooltip.entrySet()) {
+                Task customTooltipForOutputs = entry.getValue();
                 String title = customTooltipForOutputs.getTitle();
                 int priority = customTooltipForOutputs.getPriority();
                 Color color = getBackgroundCellDay(priority);

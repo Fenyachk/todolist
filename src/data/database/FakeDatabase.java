@@ -1,5 +1,7 @@
 package data.database;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
@@ -19,7 +21,7 @@ public class FakeDatabase implements DatabaseConnection {
         database.put(3, new Task(3, "Сходить за продуктами", "23.11.2024 15:30", 3));
         database.put(4, new Task(4, "Забронировать билеты на самолет", "29.11.2024 10:05", 1));
         database.put(5, new Task(5, "Позвонить в банк", "27.11.2024 16:45", 2));
-        database.put(5, new Task(5, "Позвонить на работу", "12.11.2024 16:45", 5));
+        database.put(6, new Task(5, "Позвонить на работу", "12.11.2024 16:45", 5));
     }
 
     @Override
@@ -67,5 +69,17 @@ public class FakeDatabase implements DatabaseConnection {
     @Override
     public Map<Integer, Task> getTaskById(int taskId) {
         return Map.of();
+    }
+
+    @Override
+    public Map<Integer, Task> getTaskByDay(LocalDate date) {
+        Map<Integer, Task> tasksOnDate = new HashMap<>();
+        for (Map.Entry<Integer, Task> entry : database.entrySet()) {
+            Task task = entry.getValue();
+            if (task.getDate().toLocalDate().equals(date)) {
+                tasksOnDate.put(entry.getKey(), task);
+            }
+        }
+        return tasksOnDate;
     }
 }
