@@ -1,7 +1,12 @@
 package ui.view;
 
+import data.model.Task;
+import ui.viewmodel.TaskViewModel;
+
 import javax.swing.*;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.util.Map;
 
 public class DayContextMenuView {
 
@@ -11,9 +16,21 @@ public class DayContextMenuView {
     private final MouseEvent mouseEvent;
 
     private final JPopupMenu contextMenu = new JPopupMenu();
+    private final LocalDate date;
 
-    public DayContextMenuView(MouseEvent mouseEvent) {
+    public DayContextMenuView(MouseEvent mouseEvent, LocalDate date) {
         this.mouseEvent = mouseEvent;
+        this.date = date;
+    }
+
+    public void getContextMenu() {
+        TaskViewModel taskViewModel = new TaskViewModel();
+        Map<Integer, Task> tasks = taskViewModel.getTaskByDate(this.date);
+        if (tasks.isEmpty()) {
+            getContextMenuWithoutTask();
+        } else {
+            getContextMenuWithTask();
+        }
     }
 
     public void getContextMenuWithoutTask() {

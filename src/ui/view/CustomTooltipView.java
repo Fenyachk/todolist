@@ -2,11 +2,12 @@ package ui.view;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDayChooser;
-import data.model.CustomTooltip;
 import data.model.Task;
+import ui.viewmodel.TaskViewModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class CustomTooltipView {
 
     private void setDayToolTips() {
         JDayChooser dayChooser = this.calendar.getDayChooser();
-        int currentMonth = this.calendar.getMonthChooser().getMonth();
+        int currentMonth = this.calendar.getMonthChooser().getMonth() + 1;
         int currentYear = this.calendar.getYearChooser().getYear();
         YearMonth yearMonth = YearMonth.of(currentYear, currentMonth + 1);
         int daysInMonth = yearMonth.lengthOfMonth();
@@ -51,8 +52,8 @@ public class CustomTooltipView {
                 if (isNumeric(text)) {
                     int day = Integer.parseInt(dayButton.getText());
                     if (day >= 1 && day <= daysInMonth) {
-                        CustomTooltip customTooltip = new CustomTooltip(currentYear, currentMonth, day);
-                        setDayButtonToolTip(dayButton, customTooltip);
+                        LocalDate date = LocalDate.of(currentYear, currentMonth, day);
+                        setDayButtonToolTip(dayButton, date);
                     } else {
                         dayButton.setToolTipText(null);
                     }
@@ -61,8 +62,9 @@ public class CustomTooltipView {
         }
     }
 
-    private static void setDayButtonToolTip(JButton dayButton, CustomTooltip customTooltip) {
-        Map<Integer, Task> tooltip = customTooltip.getTaskByDate();
+    private static void setDayButtonToolTip(JButton dayButton, LocalDate date) {
+        TaskViewModel taskViewModel = new TaskViewModel();
+        Map<Integer, Task> tooltip = taskViewModel.getTaskByDate(date);
         if (tooltip != null) {
             for (Map.Entry<Integer, Task> entry : tooltip.entrySet()) {
                 Task customTooltipForOutputs = entry.getValue();

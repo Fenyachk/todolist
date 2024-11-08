@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 
 public class CalendarListener {
 
@@ -25,14 +26,19 @@ public class CalendarListener {
     }
 
     private void addRightClickListener() {
+        int currentMonth = this.calendar.getMonthChooser().getMonth() + 1;
+        int currentYear = this.calendar.getYearChooser().getYear();
         for (Component component : this.calendar.getDayChooser().getDayPanel().getComponents()) {
             if (component instanceof JButton dayButton) {
                 dayButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if (SwingUtilities.isRightMouseButton(e)) {
-                            DayContextMenuView dayContextMenu = new DayContextMenuView(e);
-                            dayContextMenu.getContextMenuWithTask();
+                            String dayText = dayButton.getText();
+                            int day = Integer.parseInt(dayText);
+                            LocalDate date = LocalDate.of(currentYear, currentMonth, day);
+                            DayContextMenuView dayContextMenu = new DayContextMenuView(e, date);
+                            dayContextMenu.getContextMenu();
                         }
                     }
                 });
