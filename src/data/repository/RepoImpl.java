@@ -1,47 +1,42 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package data.repository;
 
 import data.database.FakeDatabase;
 import data.model.Task;
-
 import java.time.LocalDate;
 import java.util.Map;
 
 public class RepoImpl implements IRepo {
-
-    private final FakeDatabase databaseConnector;
+    private final FakeDatabase databaseConnector = new FakeDatabase();
 
     public RepoImpl() {
-        this.databaseConnector = new FakeDatabase();
     }
 
-    @Override
     public void insertTask(Task task) {
-        databaseConnector.insert(task);
+        this.databaseConnector.insert(task);
     }
 
-    @Override
     public void updateTask(Task task) {
-        databaseConnector.update(task);
+        this.databaseConnector.update(task);
     }
 
-    @Override
     public void deleteTask(int taskId) {
-        databaseConnector.delete(taskId);
+        this.databaseConnector.delete(taskId);
     }
 
-    @Override
     public Map<Integer, Task> getAllTask() {
-        return databaseConnector.getAllTask();
+        return this.databaseConnector.getAllTask();
     }
 
-    @Override
     public Map<Integer, Task> getTaskById(int taskId) {
-        return databaseConnector.getTaskById(taskId);
+        return this.databaseConnector.getTaskById(taskId);
     }
 
-    @Override
     public Map<Integer, Task> getTaskByDay(LocalDate date) {
-        return databaseConnector.getTaskByDay(date);
+        return this.databaseConnector.getTaskByDay(date);
     }
-
 }

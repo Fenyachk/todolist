@@ -1,85 +1,87 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package data.database;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Collections;
-
 import data.model.Task;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class FakeDatabase implements DatabaseConnection {
-
-    private final Map<Integer, Task> database;
-    private boolean isConnected;
+    private final Map<Integer, Task> database = new HashMap();
+    private boolean isConnected = false;
 
     public FakeDatabase() {
-        database = new HashMap<>();
-        isConnected = false;
-        database.put(1, new Task(1, "Закончить отчет", "22.11.2024 11:14", 2));
-        database.put(2, new Task(2, "Посетить командное собрание", "21.11.2024 09:11", 1));
-        database.put(3, new Task(3, "Сходить за продуктами", "23.11.2024 15:30", 3));
-        database.put(4, new Task(4, "Забронировать билеты на самолет", "29.11.2024 10:05", 1));
-        database.put(5, new Task(5, "Позвонить в банк", "27.11.2024 16:45", 2));
-        database.put(6, new Task(5, "Позвонить на работу", "12.11.2024 16:45", 5));
+        this.database.put(1, new Task(1, "Закончить отчет", "22.11.2024 11:14", 2));
+        this.database.put(2, new Task(2, "Посетить командное собрание", "21.11.2024 09:11", 1));
+        this.database.put(3, new Task(3, "Сходить за продуктами", "23.11.2024 15:30", 3));
+        this.database.put(4, new Task(4, "Забронировать билеты на самолет", "29.11.2024 10:05", 1));
+        this.database.put(5, new Task(5, "Позвонить в банк", "27.10.2024 16:45", 2));
+        this.database.put(6, new Task(6, "Позвонить на работу", "12.10.2024 16:45", 5));
+        this.database.put(7, new Task(7, "Позвонить на работу2", "12.10.2024 16:45", 5));
     }
 
-    @Override
     public void connect() {
-        if (!isConnected) {
+        if (!this.isConnected) {
             System.out.println("Подключение к базе данных...");
-            isConnected = true;
+            this.isConnected = true;
         } else {
             System.out.println("Уже подключен к базе данных");
         }
+
     }
 
-    @Override
     public void disconnect() {
-        if (isConnected) {
+        if (this.isConnected) {
             System.out.println("Отключение от базы данных...");
-            isConnected = false;
+            this.isConnected = false;
         } else {
             System.out.println("Уже отключен от базы данных");
         }
+
     }
 
-    @Override
     public void insert(Task task) {
-        int newId = database.isEmpty() ? 1 : Collections.max(database.keySet()) + 1;
-        database.put(newId, task);
+        int newId = this.database.isEmpty() ? 1 : (Integer) Collections.max(this.database.keySet()) + 1;
+        task.setId(newId);
+        System.out.println(this.database);
+        this.database.put(newId, task);
     }
 
-    @Override
     public void update(Task task) {
         int taskId = task.getId();
-        database.put(taskId, task);
+        this.database.put(taskId, task);
     }
 
-    @Override
     public void delete(int taskId) {
-        database.remove(taskId);
+        this.database.remove(taskId);
     }
 
-    @Override
     public Map<Integer, Task> getAllTask() {
-        return database;
+        return this.database;
     }
 
-    @Override
     public Map<Integer, Task> getTaskById(int taskId) {
         return Map.of();
     }
 
-    @Override
     public Map<Integer, Task> getTaskByDay(LocalDate date) {
-        Map<Integer, Task> tasksOnDate = new HashMap<>();
-        for (Map.Entry<Integer, Task> entry : database.entrySet()) {
-            Task task = entry.getValue();
+        Map<Integer, Task> tasksOnDate = new HashMap();
+        Iterator var3 = this.database.entrySet().iterator();
+
+        while (var3.hasNext()) {
+            Map.Entry<Integer, Task> entry = (Map.Entry) var3.next();
+            Task task = (Task) entry.getValue();
             if (task.getDate().toLocalDate().equals(date)) {
-                tasksOnDate.put(entry.getKey(), task);
+                tasksOnDate.put((Integer) entry.getKey(), task);
             }
         }
+
         return tasksOnDate;
     }
 }

@@ -1,16 +1,19 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package ui.viewmodel;
 
 import data.model.Task;
 import data.repository.RepoImpl;
-
 import java.time.LocalDate;
 import java.util.Map;
 
 public class TaskViewModel {
-    private final RepoImpl repoImpl;
+    private static final RepoImpl repoImpl = new RepoImpl();
 
     public TaskViewModel() {
-        this.repoImpl = new RepoImpl();
     }
 
     public void addTask(Task task) {
@@ -36,5 +39,4 @@ public class TaskViewModel {
     public Map<Integer, Task> getTaskByDate(LocalDate date) {
         return repoImpl.getTaskByDay(date);
     }
-
 }

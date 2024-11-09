@@ -1,3 +1,8 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package data.model;
 
 import java.time.LocalDateTime;
@@ -13,33 +18,36 @@ public class Task {
     private static final String DATE_FORMAT = "%02d";
     private static final String TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
+    public Task(String name, String date, int priority) {
+        this(0, name, date, priority);
+    }
+
     public Task(int id, String name, String date, int priority) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.priority = priority;
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-        LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
-        this.hour = String.format(DATE_FORMAT, dateTime.getHour());
-        this.minute = String.format(DATE_FORMAT, dateTime.getMinute());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(this.date, formatter);
+        this.hour = String.format("%02d", dateTime.getHour());
+        this.minute = String.format("%02d", dateTime.getMinute());
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public LocalDateTime getDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-        return LocalDateTime.parse(date, formatter);
+        return LocalDateTime.parse(this.date, formatter);
     }
 
     public int getPriority() {
-        return priority;
+        return this.priority;
     }
 
     public void setId(int id) {
@@ -61,5 +69,4 @@ public class Task {
     public String getTitle() {
         return this.name + " в " + this.hour + ":" + this.minute;
     }
-
 }

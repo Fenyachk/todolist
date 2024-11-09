@@ -31,3 +31,4 @@ bin/
 ### My Ignored Files ###
 config/**/
 .idea/uiDesigner.xml
+/target/**/
