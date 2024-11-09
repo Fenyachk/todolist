@@ -21,7 +21,8 @@ public class RealDatabase implements DatabaseConnection {
         try {
             FileInputStream refreshToken = new FileInputStream(DATABASE_URL);
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(refreshToken))
+                    .setCredentials(GoogleCredentials
+                            .fromStream(refreshToken))
                     .setDatabaseUrl("https://todolist-ab5ae.firebaseio.com")
                     .build();
 
