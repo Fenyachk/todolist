@@ -9,12 +9,12 @@ import data.model.Task;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 public class RealDatabase implements DatabaseConnection {
     private static final String DATABASE_URL = "../.../../config/todolist-ab5ae-firebase-adminsdk-mtvk2-4ec34dbe8f.json";
-    private Map<Integer, Task> database;
+    private List<Task> database;
 
     @Override
     public void connect() {
@@ -48,17 +48,17 @@ public class RealDatabase implements DatabaseConnection {
     }
 
     @Override
-    public Map<Integer, Task> getAllTask() {
+    public List<Task> getAllTask() {
         return database;
     }
 
     @Override
-    public Map<Integer, Task> getTaskById(int taskId) {
+    public List<Task> getTaskById(int taskId) {
         return database;
     }
 
     @Override
-    public Map<Integer, Task> getTaskByDay(LocalDate date) {
+    public List<Task> getTaskByDay(LocalDate date) {
         return database;
     }
 

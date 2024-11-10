@@ -11,6 +11,7 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -21,7 +22,7 @@ import ui.view.TaskFormInputView;
 public class CalendarListener {
     private final JCalendar calendar;
     private final JFrame frame;
-    private LocalDate chosenDay;
+    private LocalDateTime chosenDay;
 
     public CalendarListener(JCalendar calendar, JFrame frame) {
         this.calendar = calendar;
@@ -43,8 +44,8 @@ public class CalendarListener {
                 dayButton.addMouseListener(new MouseAdapter() {
                     public void mousePressed(MouseEvent e) {
                         if (SwingUtilities.isRightMouseButton(e)) {
-                            LocalDate date = CalendarListener.this.IdentifySelectedDay(dayButton);
-                            DayContextMenuView dayContextMenu = new DayContextMenuView(e, CalendarListener.this.frame, date, CalendarListener.this.calendar);
+                            LocalDateTime date = CalendarListener.this.IdentifySelectedDay(dayButton);
+                            DayContextMenuView dayContextMenu = new DayContextMenuView(e, frame, date, calendar);
                             dayContextMenu.getContextMenu();
                         }
 
@@ -65,7 +66,7 @@ public class CalendarListener {
                 dayButton.addMouseListener(new MouseAdapter() {
                     public void mousePressed(MouseEvent e) {
                         if (SwingUtilities.isLeftMouseButton(e)) {
-                            LocalDate date = CalendarListener.this.IdentifySelectedDay(dayButton);
+                            LocalDateTime date = CalendarListener.this.IdentifySelectedDay(dayButton);
                             CalendarListener.this.setVisibleListener(date);
                         }
 
@@ -76,18 +77,17 @@ public class CalendarListener {
 
     }
 
-    private LocalDate IdentifySelectedDay(JButton dayButton) {
+    private LocalDateTime IdentifySelectedDay(JButton dayButton) {
         int currentMonth = this.calendar.getMonthChooser().getMonth() + 1;
         int currentYear = this.calendar.getYearChooser().getYear();
         String dayText = dayButton.getText();
         int day = Integer.parseInt(dayText);
-        LocalDate date = LocalDate.of(currentYear, currentMonth, day);
+        LocalDateTime date = LocalDateTime.of(currentYear, currentMonth, day, 10, 00);
         return date;
     }
 
-    private void setVisibleListener(LocalDate date) {
-        TaskFormInputView taskFormInputView = new TaskFormInputView(this.frame, date, this.calendar);
-        taskFormInputView.showWindowInputForm();
+    private void setVisibleListener(LocalDateTime date) {
+        TaskFormInputView taskFormInputView = new TaskFormInputView(this.frame, date, this.calendar, "", 1);
         taskFormInputView.setVisible(true);
     }
 }

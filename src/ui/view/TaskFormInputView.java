@@ -11,6 +11,7 @@ import data.model.Task;
 import java.awt.GridLayout;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,36 +37,67 @@ public class TaskFormInputView extends JDialog {
     private static final String PRIORITY_LABEL = "Приоритет (1-5):";
     private static final String SAVE_BUTTON_LABEL = "Сохранить";
     private static final String CANCEL_BUTTON_LABEL = "Отмена";
-    private static final String DATE_FORMAT = "##.##.#### ##:##";
+    private static final String DATE_FORMATTED = "##.##.#### ##:##";
+    private static final String DATE_FORMAT = "%02d";
+    private static final String TIME_START = "10:00";
     private final JCalendar calendar;
     private static final TaskViewModel taskViewModel = new TaskViewModel();
     private final JFrame parent;
+    private final Task task;
     private JFormattedTextField dateTextField;
     private final JTextField titleTextField;
     private final JComboBox priorityTextField;
 
-    public TaskFormInputView(JFrame parent, LocalDate date, JCalendar calendar) {
-        super(parent, "Информация о задаче", true);
+    public TaskFormInputView(JFrame parent, LocalDateTime date, JCalendar calendar, String title, int priority) {
+        super(parent, NAME, true);
         this.parent = parent;
         this.calendar = calendar;
-        this.dateTextField = createFormattedTextField("##.##.#### ##:##");
+        this.dateTextField = createFormattedTextField(DATE_FORMATTED);
         String dateFormatted = this.FormattedDate(date);
         this.dateTextField.setValue(dateFormatted);
         Integer[] priorityValueField = new Integer[]{1, 2, 3, 4, 5};
         this.priorityTextField = new JComboBox(priorityValueField);
+        this.priorityTextField.setSelectedItem(priority);
         this.titleTextField = new JTextField();
+        this.titleTextField.setText(title);
+        this.task = null;
+        showWindowInputForm();
+    }
+
+    public TaskFormInputView(JFrame parent, LocalDateTime date, JCalendar calendar, Task task) {
+        super(parent, NAME, true);
+        this.parent = parent;
+        this.calendar = calendar;
+        this.dateTextField = createFormattedTextField(DATE_FORMATTED);
+        String dateFormatted = this.FormattedDate(date);
+        this.dateTextField.setValue(dateFormatted);
+        Integer[] priorityValueField = new Integer[]{1, 2, 3, 4, 5};
+        this.priorityTextField = new JComboBox(priorityValueField);
+        String titleTask = task.getName();
+        int priorityTask = task.getPriority();
+        this.priorityTextField.setSelectedItem(priorityTask);
+        this.titleTextField = new JTextField();
+        this.titleTextField.setText(titleTask);
+        this.task = task;
+        showWindowInputForm();
     }
 
     public void showWindowInputForm() {
         JPanel jp = new JPanel(GRID_LAYOUT);
         jp.setBorder(BORDER_PANEL);
-        JLabel dateLabel = new JLabel("Дата (dd.MM.yyyy HH:mm):");
-        JLabel titleLabel = new JLabel("Название задачи:");
-        JLabel priorityLabel = new JLabel("Приоритет (1-5):");
-        JButton cancelButton = new JButton("Отмена");
-        JButton saveButton = new JButton("Сохранить");
+        JLabel dateLabel = new JLabel(DATE_LABEL);
+        JLabel titleLabel = new JLabel(TEXT_LABEL);
+        JLabel priorityLabel = new JLabel(PRIORITY_LABEL);
+        JButton cancelButton = new JButton(CANCEL_BUTTON_LABEL);
+        JButton saveButton = new JButton(SAVE_BUTTON_LABEL);
+        CustomTooltipView customTooltipView = new CustomTooltipView(this.calendar);
         saveButton.addActionListener((e) -> {
-            this.saveTask();
+            if (this.task == null) {
+                this.saveTask();
+            } else {
+                this.saveTask(task);
+            }
+            customTooltipView.reloadToolTips();
         });
         cancelButton.addActionListener((e) -> {
             this.dispose();
@@ -79,18 +111,26 @@ public class TaskFormInputView extends JDialog {
         jp.add(cancelButton);
         jp.add(saveButton);
         this.add(jp);
-        this.setSize(300, 250);
+        this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setLocationRelativeTo(this.parent);
     }
 
     private void saveTask() {
-        CustomTooltipView customTooltipView = new CustomTooltipView(this.calendar);
         String date = this.dateTextField.getText();
         String name = this.titleTextField.getText();
         int priority = (Integer) this.priorityTextField.getSelectedItem();
         Task task = new Task(name, date, priority);
         taskViewModel.addTask(task);
-        customTooltipView.setTooltips();
+        this.dispose();
+    }
+
+    private void saveTask(Task task) {
+        String date = this.dateTextField.getText();
+        String name = this.titleTextField.getText();
+        int priority = (Integer) this.priorityTextField.getSelectedItem();
+        task.setName(name);
+        task.setDate(date);
+        task.setPriority(priority);
         this.dispose();
     }
 
@@ -109,12 +149,16 @@ public class TaskFormInputView extends JDialog {
         return formattedTextField;
     }
 
-    private String FormattedDate(LocalDate date) {
+    private String FormattedDate(LocalDateTime date) {
         int day = date.getDayOfMonth();
-        String dayWithLeadingZero = String.format("%02d", day);
+        String dayWithLeadingZero = String.format(DATE_FORMAT, day);
         int month = date.getMonthValue();
-        String monthWithLeadingZero = String.format("%02d", month);
+        String monthWithLeadingZero = String.format(DATE_FORMAT, month);
         int year = date.getYear();
-        return dayWithLeadingZero + "." + monthWithLeadingZero + "." + year + " 10:00";
+        int hour = date.getHour();
+        String hourWithLeadingZero = String.format(DATE_FORMAT, hour);
+        int minute = date.getMinute();
+        String minuteWithLeadingZero = String.format(DATE_FORMAT, minute);
+        return dayWithLeadingZero + "." + monthWithLeadingZero + "." + year + " " + hourWithLeadingZero + ":" + minuteWithLeadingZero;
     }
 }

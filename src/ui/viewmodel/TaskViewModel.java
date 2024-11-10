@@ -9,7 +9,8 @@ import data.model.Task;
 import data.repository.RepoImpl;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class TaskViewModel {
     private static final RepoImpl repoImpl = new RepoImpl();
@@ -29,15 +30,15 @@ public class TaskViewModel {
         repoImpl.deleteTask(taskId);
     }
 
-    public Map<Integer, Task> getTask(int taskId) {
+    public List<Task> getTask(int taskId) {
         return repoImpl.getTaskById(taskId);
     }
 
-    public Map<Integer, Task> getAllTask() {
+    public List<Task> getAllTask() {
         return repoImpl.getAllTask();
     }
 
-    public Map<Integer, Task> getTaskByDate(LocalDate date) {
+    public List<Task> getTaskByDate(LocalDate date) {
         return repoImpl.getTaskByDay(date);
     }
 }

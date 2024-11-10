@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Task {
-    private final String hour;
-    private final String minute;
+    private String hour;
+    private String minute;
     private int id;
     private String name;
     private String date;
@@ -27,10 +27,7 @@ public class Task {
         this.name = name;
         this.date = date;
         this.priority = priority;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(this.date, formatter);
-        this.hour = String.format("%02d", dateTime.getHour());
-        this.minute = String.format("%02d", dateTime.getMinute());
+        setDateFormat(date);
     }
 
     public int getId() {
@@ -42,7 +39,7 @@ public class Task {
     }
 
     public LocalDateTime getDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return LocalDateTime.parse(this.date, formatter);
     }
 
@@ -60,6 +57,7 @@ public class Task {
 
     public void setDate(String date) {
         this.date = date;
+        setDateFormat(date);
     }
 
     public void setPriority(int priority) {
@@ -68,5 +66,12 @@ public class Task {
 
     public String getTitle() {
         return this.name + " в " + this.hour + ":" + this.minute;
+    }
+
+    public void setDateFormat(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+        LocalDateTime dateTime = LocalDateTime.parse(this.date, formatter);
+        this.hour = String.format(DATE_FORMAT, dateTime.getHour());
+        this.minute = String.format(DATE_FORMAT, dateTime.getMinute());
     }
 }

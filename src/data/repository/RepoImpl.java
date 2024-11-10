@@ -9,7 +9,7 @@ import data.database.FakeDatabase;
 import data.model.Task;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.List;
 
 public class RepoImpl implements IRepo {
     private final FakeDatabase databaseConnector = new FakeDatabase();
@@ -29,15 +29,15 @@ public class RepoImpl implements IRepo {
         this.databaseConnector.delete(taskId);
     }
 
-    public Map<Integer, Task> getAllTask() {
+    public List<Task> getAllTask() {
         return this.databaseConnector.getAllTask();
     }
 
-    public Map<Integer, Task> getTaskById(int taskId) {
+    public List<Task> getTaskById(int taskId) {
         return this.databaseConnector.getTaskById(taskId);
     }
 
-    public Map<Integer, Task> getTaskByDay(LocalDate date) {
+    public List<Task> getTaskByDay(LocalDate date) {
         return this.databaseConnector.getTaskByDay(date);
     }
 }

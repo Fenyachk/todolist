@@ -3,7 +3,7 @@ package data.repository;
 import data.model.Task;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.List;
 
 public interface IRepo {
 
@@ -13,11 +13,11 @@ public interface IRepo {
 
     void deleteTask(int taskId);
 
-    Map<Integer, Task> getAllTask();
+    List<Task> getAllTask();
 
-    Map<Integer, Task> getTaskById(int taskId);
+    List<Task> getTaskById(int taskId);
 
-    Map<Integer, Task> getTaskByDay(LocalDate date);
+    List<Task> getTaskByDay(LocalDate date);
 
 
 }

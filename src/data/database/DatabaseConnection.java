@@ -1,8 +1,7 @@
 package data.database;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.List;
 
 import data.model.Task;
 
@@ -17,9 +16,9 @@ public interface DatabaseConnection {
 
     void delete(int taskId);
 
-    Map<Integer, Task> getAllTask();
+    List<Task> getAllTask();
 
-    Map<Integer, Task> getTaskById(int taskId);
+    List<Task> getTaskById(int taskId);
 
-    Map<Integer, Task> getTaskByDay(LocalDate date);
+    List<Task> getTaskByDay(LocalDate date);
 }

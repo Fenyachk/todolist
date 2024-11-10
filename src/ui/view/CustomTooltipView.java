@@ -12,9 +12,9 @@ import data.model.Task;
 import java.awt.Color;
 import java.awt.Component;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
@@ -35,8 +35,9 @@ public class CustomTooltipView {
         tooltipPopup.add(tooltipLabel);
     }
 
-    public void setTooltips() {
-        this.setDayToolTips();
+    public void reloadToolTips() {
+        this.reloadDayToolTips();
+        this.setTooltipsChangeDMY();
     }
 
     public void setTooltipsChangeDMY() {
@@ -46,24 +47,24 @@ public class CustomTooltipView {
     }
 
     private void setTooltipsChangeDay() {
-        this.calendar.getDayChooser().addPropertyChangeListener("day", (evt) -> {
-            this.setDayToolTips();
+        this.calendar.getDayChooser().addPropertyChangeListener(DAY, (evt) -> {
+            this.reloadDayToolTips();
         });
     }
 
     private void setTooltipsChangeMonth() {
-        this.calendar.getMonthChooser().addPropertyChangeListener("month", (evt) -> {
-            this.setDayToolTips();
+        this.calendar.getMonthChooser().addPropertyChangeListener(MONTH, (evt) -> {
+            this.reloadDayToolTips();
         });
     }
 
     private void setTooltipsChangeYear() {
-        this.calendar.getYearChooser().addPropertyChangeListener("year", (evt) -> {
-            this.setDayToolTips();
+        this.calendar.getYearChooser().addPropertyChangeListener(YEAR, (evt) -> {
+            this.reloadDayToolTips();
         });
     }
 
-    private void setDayToolTips() {
+    private void reloadDayToolTips() {
         JDayChooser dayChooser = this.calendar.getDayChooser();
         int currentMonth = this.calendar.getMonthChooser().getMonth() + 1;
         int currentYear = this.calendar.getYearChooser().getYear();
@@ -71,7 +72,6 @@ public class CustomTooltipView {
         int daysInMonth = yearMonth.lengthOfMonth();
         Component[] var6 = dayChooser.getDayPanel().getComponents();
         int var7 = var6.length;
-
         for (int var8 = 0; var8 < var7; ++var8) {
             Component component = var6[var8];
             if (component instanceof JButton dayButton) {
@@ -80,9 +80,7 @@ public class CustomTooltipView {
                     int day = Integer.parseInt(dayButton.getText());
                     if (day >= 1 && day <= daysInMonth) {
                         LocalDate date = LocalDate.of(currentYear, currentMonth, day);
-                        this.setDayButtonToolTip(dayButton, date);
-                    } else {
-                        dayButton.setToolTipText((String) null);
+                        this.removeOrSetDayButtonTooltip(dayButton, date);
                     }
                 }
             }
@@ -90,28 +88,35 @@ public class CustomTooltipView {
 
     }
 
-    private void setDayButtonToolTip(JButton dayButton, LocalDate date) {
-        Map<Integer, Task> tooltip = taskViewModel.getTaskByDate(date);
-        System.out.println(tooltip);
-        StringBuilder tooltipText = new StringBuilder();
-        if (tooltip != null) {
-            Color color;
-            for (Iterator var5 = tooltip.entrySet().iterator(); var5.hasNext(); dayButton.setBackground(color)) {
-                Map.Entry<Integer, Task> entry = (Map.Entry) var5.next();
-                Task customTooltipForOutputs = (Task) entry.getValue();
-                String title = customTooltipForOutputs.getTitle();
-                int priority = customTooltipForOutputs.getPriority();
-                color = getBackgroundCellDay(priority);
-                if (tooltipText.isEmpty()) {
-                    tooltipText.append(title);
-                } else {
-                    tooltipText.append("\n").append(title);
-                }
-            }
-
-            dayButton.setToolTipText(tooltipText.toString());
+    private void removeOrSetDayButtonTooltip(JButton dayButton, LocalDate date) {
+        List<Task> tooltip = taskViewModel.getTaskByDate(date);
+        if (tooltip != null && !tooltip.isEmpty()) {
+            setDayButtonToolTip(dayButton, tooltip);
+        } else {
+            removeDayButtonToolTip(dayButton);
         }
+    }
 
+    private void setDayButtonToolTip(JButton dayButton, List<Task> tooltip) {
+        StringBuilder tooltipText = new StringBuilder();
+        Color color;
+        for (Task task : tooltip) {
+            String title = task.getTitle();
+            int priority = task.getPriority();
+            color = getBackgroundCellDay(priority);
+            dayButton.setBackground(color);
+            if (tooltipText.length() == 0) {
+                tooltipText.append(title);
+            } else {
+                tooltipText.append("\n").append(title);
+            }
+        }
+        dayButton.setToolTipText(tooltipText.toString());
+    }
+
+    private void removeDayButtonToolTip(JButton dayButton) {
+        dayButton.setToolTipText(null);
+        dayButton.setBackground(Color.white);
     }
 
     private static Color getBackgroundCellDay(int priority) {

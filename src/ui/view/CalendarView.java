@@ -20,23 +20,18 @@ public class CalendarView {
     }
 
     public static void showCalendar() {
-        JFrame frame = new JFrame("To-do List Calendar");
+        JFrame frame = new JFrame(NAME);
         CalendarListener calendarListener = new CalendarListener(calendar, frame);
         drawCalendarWindow(frame);
-        setTooltips();
+        CustomTooltipView customTooltipSetView1 = new CustomTooltipView(calendar);
+        customTooltipSetView1.reloadToolTips();
         calendarListener.addListener();
     }
 
     private static void drawCalendarWindow(JFrame frame) {
         frame.add(calendar);
-        frame.setSize(400, 400);
+        frame.setSize(WIDTH_WINDOW, HEIGHT_WINDOW);
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
-    }
-
-    private static void setTooltips() {
-        CustomTooltipView customTooltipSetView1 = new CustomTooltipView(calendar);
-        customTooltipSetView1.setTooltips();
-        customTooltipSetView1.setTooltipsChangeDMY();
     }
 }
