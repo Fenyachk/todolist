@@ -9,15 +9,12 @@ import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDayChooser;
 import data.model.Task;
 
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPopupMenu;
+import javax.swing.*;
 
 import ui.viewmodel.TaskViewModel;
 
@@ -75,6 +72,9 @@ public class CustomTooltipView {
         for (int var8 = 0; var8 < var7; ++var8) {
             Component component = var6[var8];
             if (component instanceof JButton dayButton) {
+                dayButton.removeAll();
+                dayButton.revalidate();
+                dayButton.repaint();
                 String text = dayButton.getText();
                 if (this.isNumeric(text)) {
                     int day = Integer.parseInt(dayButton.getText());
@@ -99,19 +99,29 @@ public class CustomTooltipView {
 
     private void setDayButtonToolTip(JButton dayButton, List<Task> tooltip) {
         StringBuilder tooltipText = new StringBuilder();
-        Color color;
+        BorderLayout borderLayout = new BorderLayout();
+        JPanel circlesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 3));
+        circlesPanel.setOpaque(false);
+
         for (Task task : tooltip) {
             String title = task.getTitle();
             int priority = task.getPriority();
-            color = getBackgroundCellDay(priority);
-            dayButton.setBackground(color);
+
+            CircleOnCellDayView circleOnCellDayView = new CircleOnCellDayView(priority);
+            circlesPanel.add(circleOnCellDayView);
+
             if (tooltipText.length() == 0) {
                 tooltipText.append(title);
             } else {
                 tooltipText.append("\n").append(title);
             }
+
         }
+
+        dayButton.setLayout(borderLayout);
+        dayButton.add(circlesPanel, BorderLayout.CENTER);
         dayButton.setToolTipText(tooltipText.toString());
+
     }
 
     private void removeDayButtonToolTip(JButton dayButton) {

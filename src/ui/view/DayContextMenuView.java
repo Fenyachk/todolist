@@ -96,6 +96,11 @@ public class DayContextMenuView {
             if (countTask > 1) {
                 TaskSelectionFormView taskSelectionFormView = new TaskSelectionFormView(calendar, frame, tasks, EDIT_ITEM_MENU);
                 taskSelectionFormView.setVisible(true);
+            } else {
+                Task task = tasks.getFirst();
+                LocalDateTime dateTask = task.getDate();
+                TaskFormInputView taskFormInputView = new TaskFormInputView(this.frame, dateTask, this.calendar, task);
+                taskFormInputView.setVisible(true);
             }
         });
     }

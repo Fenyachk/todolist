@@ -6,6 +6,7 @@
 package ui.view;
 
 import com.toedter.calendar.JCalendar;
+import data.model.PriorityItemSelector;
 import data.model.Task;
 
 import java.awt.GridLayout;
@@ -24,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
+import org.apache.hc.core5.reactor.Command;
 import ui.viewmodel.TaskViewModel;
 
 public class TaskFormInputView extends JDialog {
@@ -47,6 +49,13 @@ public class TaskFormInputView extends JDialog {
     private JFormattedTextField dateTextField;
     private final JTextField titleTextField;
     private final JComboBox priorityTextField;
+    private final PriorityItemSelector[] priorityValueField = new PriorityItemSelector[]{
+            new PriorityItemSelector(1, "Очень низкий"),
+            new PriorityItemSelector(2, "Низкий"),
+            new PriorityItemSelector(3, "Средний"),
+            new PriorityItemSelector(4, "Повышенный"),
+            new PriorityItemSelector(5, "Очень высокий")
+    };
 
     public TaskFormInputView(JFrame parent, LocalDateTime date, JCalendar calendar, String title, int priority) {
         super(parent, NAME, true);
@@ -55,9 +64,8 @@ public class TaskFormInputView extends JDialog {
         this.dateTextField = createFormattedTextField(DATE_FORMATTED);
         String dateFormatted = this.FormattedDate(date);
         this.dateTextField.setValue(dateFormatted);
-        Integer[] priorityValueField = new Integer[]{1, 2, 3, 4, 5};
         this.priorityTextField = new JComboBox(priorityValueField);
-        this.priorityTextField.setSelectedItem(priority);
+        this.setSelectedPriority(priority);
         this.titleTextField = new JTextField();
         this.titleTextField.setText(title);
         this.task = null;
@@ -71,11 +79,10 @@ public class TaskFormInputView extends JDialog {
         this.dateTextField = createFormattedTextField(DATE_FORMATTED);
         String dateFormatted = this.FormattedDate(date);
         this.dateTextField.setValue(dateFormatted);
-        Integer[] priorityValueField = new Integer[]{1, 2, 3, 4, 5};
         this.priorityTextField = new JComboBox(priorityValueField);
         String titleTask = task.getName();
         int priorityTask = task.getPriority();
-        this.priorityTextField.setSelectedItem(priorityTask);
+        this.setSelectedPriority(priorityTask);
         this.titleTextField = new JTextField();
         this.titleTextField.setText(titleTask);
         this.task = task;
@@ -118,7 +125,8 @@ public class TaskFormInputView extends JDialog {
     private void saveTask() {
         String date = this.dateTextField.getText();
         String name = this.titleTextField.getText();
-        int priority = (Integer) this.priorityTextField.getSelectedItem();
+        PriorityItemSelector selectedPriority = (PriorityItemSelector) this.priorityTextField.getSelectedItem();
+        int priority = selectedPriority.getPriority();
         Task task = new Task(name, date, priority);
         taskViewModel.addTask(task);
         this.dispose();
@@ -127,7 +135,8 @@ public class TaskFormInputView extends JDialog {
     private void saveTask(Task task) {
         String date = this.dateTextField.getText();
         String name = this.titleTextField.getText();
-        int priority = (Integer) this.priorityTextField.getSelectedItem();
+        PriorityItemSelector selectedPriority = (PriorityItemSelector) this.priorityTextField.getSelectedItem();
+        int priority = selectedPriority.getPriority();
         task.setName(name);
         task.setDate(date);
         task.setPriority(priority);
@@ -161,4 +170,14 @@ public class TaskFormInputView extends JDialog {
         String minuteWithLeadingZero = String.format(DATE_FORMAT, minute);
         return dayWithLeadingZero + "." + monthWithLeadingZero + "." + year + " " + hourWithLeadingZero + ":" + minuteWithLeadingZero;
     }
+
+    private void setSelectedPriority(int priority) {
+        for (PriorityItemSelector priorityItemSelector : priorityValueField) {
+            if (priorityItemSelector.getPriority() == priority) {
+                this.priorityTextField.setSelectedItem(priorityItemSelector);
+                break;
+            }
+        }
+    }
+
 }
